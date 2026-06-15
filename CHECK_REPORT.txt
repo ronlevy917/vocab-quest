@@ -1,0 +1,10 @@
+Vocab Quest verified package check
+
+PASS - index.html starts with <!doctype html>
+PASS - index.html does not start with Firebase rules
+PASS - index.html does not contain Firestore rules text
+PASS - JavaScript syntax check passed with node --check
+PASS - basic runtime render check passed in Node VM mock
+PASS - firebase-config.js uses window.VOCAB_QUEST_FIREBASE_CONFIG
+PASS - manifest.webmanifest exists
+PASS - icons/icon-192.png and icons/icon-512.png exist

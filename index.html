@@ -1,0 +1,1004 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#08111f">
+  <meta name="description" content="Vocab Quest — משחק הכנה למבחן אוצר מילים באנגלית">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Vocab Quest">
+  <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <link rel="manifest" href="manifest.webmanifest?v=verified-2026-06-15-v4">
+  <link rel="apple-touch-icon" href="icons/icon-192.png?v=verified-2026-06-15-v4">
+  <link rel="icon" href="icons/icon-192.png?v=verified-2026-06-15-v4">
+  <title>Vocab Quest | מבחן אוצר מילים</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #07101f;
+      --bg2: #0e1b32;
+      --card: rgba(255,255,255,.085);
+      --card2: rgba(255,255,255,.13);
+      --line: rgba(255,255,255,.16);
+      --text: #f7fbff;
+      --muted: rgba(247,251,255,.72);
+      --muted2: rgba(247,251,255,.52);
+      --brand: #76e4f7;
+      --brand2: #a78bfa;
+      --good: #34d399;
+      --bad: #fb7185;
+      --warn: #fbbf24;
+      --shadow: 0 24px 80px rgba(0,0,0,.36);
+      --radius: 26px;
+      --safeTop: env(safe-area-inset-top, 0px);
+      --safeBottom: env(safe-area-inset-bottom, 0px);
+    }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html, body { margin: 0; min-height: 100%; }
+    body {
+      font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at 16% -10%, rgba(118,228,247,.32), transparent 34%),
+        radial-gradient(circle at 92% 10%, rgba(167,139,250,.28), transparent 31%),
+        linear-gradient(160deg, var(--bg), var(--bg2) 55%, #101827);
+      color: var(--text);
+      min-height: 100dvh;
+      overflow-x: hidden;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image: linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px);
+      background-size: 36px 36px;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,.5), transparent 72%);
+    }
+    button, input { font: inherit; }
+    button { cursor: pointer; color: inherit; }
+    .ltr { direction: ltr; unicode-bidi: isolate; }
+    .app {
+      width: min(1120px, 100%);
+      margin: 0 auto;
+      padding: calc(16px + var(--safeTop)) 16px calc(92px + var(--safeBottom));
+      position: relative;
+      z-index: 1;
+    }
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .logo { display: flex; align-items: center; gap: 10px; min-width: 0; }
+    .logo-mark {
+      width: 48px; height: 48px; border-radius: 16px;
+      display: grid; place-items: center;
+      background: linear-gradient(135deg, var(--brand), var(--brand2));
+      box-shadow: 0 14px 34px rgba(118,228,247,.18);
+      color: #07101f; font-size: 25px; font-weight: 900;
+    }
+    .logo h1 { margin: 0; font-size: clamp(1.35rem, 4vw, 2rem); letter-spacing: -.04em; }
+    .logo p { margin: 2px 0 0; color: var(--muted); font-size: .92rem; }
+    .status { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; }
+    .pill, .badge {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.08);
+      border-radius: 999px;
+      padding: 8px 11px;
+      font-weight: 800;
+      color: rgba(255,255,255,.88);
+      font-size: .82rem;
+      white-space: nowrap;
+    }
+    .badge.good { color: #bcfce6; border-color: rgba(52,211,153,.35); background: rgba(52,211,153,.12); }
+    .badge.bad { color: #ffd2db; border-color: rgba(251,113,133,.35); background: rgba(251,113,133,.12); }
+    .badge.warn { color: #ffe9a3; border-color: rgba(251,191,36,.35); background: rgba(251,191,36,.12); }
+    .hero {
+      display: grid;
+      grid-template-columns: 1.16fr .84fr;
+      gap: 16px;
+      align-items: stretch;
+    }
+    .panel {
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.07));
+      backdrop-filter: blur(18px);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 20px;
+      overflow: hidden;
+    }
+    .panel h2, .panel h3 { margin: 0 0 8px; letter-spacing: -.03em; }
+    .panel h2 { font-size: clamp(1.8rem, 8vw, 4rem); line-height: .98; }
+    .panel h3 { font-size: 1.18rem; }
+    .note { color: var(--muted); line-height: 1.55; margin: 0; }
+    .grid { display: grid; gap: 12px; }
+    .stats { grid-template-columns: repeat(4, 1fr); margin-top: 16px; }
+    .stat { border: 1px solid var(--line); border-radius: 22px; padding: 14px; background: rgba(255,255,255,.07); }
+    .stat b { display: block; font-size: 1.55rem; }
+    .stat span { color: var(--muted); font-size: .84rem; }
+    .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+    .btn {
+      border: 0;
+      border-radius: 18px;
+      padding: 13px 16px;
+      font-weight: 950;
+      min-height: 48px;
+      transition: transform .12s ease, filter .12s ease, background .12s ease;
+    }
+    .btn:active { transform: scale(.985); }
+    .primary { color: #06111d; background: linear-gradient(135deg, var(--brand), var(--brand2)); box-shadow: 0 12px 30px rgba(118,228,247,.2); }
+    .soft { background: rgba(255,255,255,.11); border: 1px solid var(--line); }
+    .danger { background: rgba(251,113,133,.16); border: 1px solid rgba(251,113,133,.35); color: #ffd3dc; }
+    .ghost { background: transparent; border: 1px solid var(--line); color: var(--muted); }
+    .modes { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    .mode {
+      text-align: right;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.08);
+      border-radius: 24px;
+      padding: 16px;
+      min-height: 126px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .mode .icon { font-size: 1.9rem; }
+    .mode strong { display:block; font-size: 1.08rem; margin-bottom: 4px; }
+    .mode span { display:block; color: var(--muted); line-height: 1.35; font-size:.9rem; }
+    .screen {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 330px;
+      gap: 16px;
+      align-items: start;
+    }
+    .screen-main { min-height: 520px; }
+    .side { position: sticky; top: 12px; }
+    .question-card {
+      min-height: 480px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      gap: 18px;
+    }
+    .term { direction: ltr; unicode-bidi: isolate; font-weight: 950; font-size: clamp(2.05rem, 9vw, 5.5rem); line-height: 1; letter-spacing: -.05em; }
+    .translation { font-size: clamp(1.4rem, 5vw, 3rem); font-weight: 950; line-height: 1.15; }
+    .sub { color: var(--muted); font-size: 1rem; }
+    .progressbar { height: 11px; border-radius: 999px; overflow: hidden; background: rgba(255,255,255,.11); border: 1px solid var(--line); }
+    .progressbar i { display:block; height: 100%; width: 0; background: linear-gradient(90deg, var(--brand), var(--brand2)); border-radius: inherit; }
+    .choices { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; width: 100%; }
+    .choice { min-height: 70px; background: rgba(255,255,255,.09); border: 1px solid var(--line); border-radius: 20px; padding: 14px; font-weight: 900; }
+    .choice.good { background: rgba(52,211,153,.18); border-color: rgba(52,211,153,.55); }
+    .choice.bad { background: rgba(251,113,133,.18); border-color: rgba(251,113,133,.55); }
+    .field {
+      width: min(520px, 100%);
+      direction: ltr;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 15px 16px;
+      min-height: 56px;
+      background: rgba(255,255,255,.1);
+      color: var(--text);
+      outline: none;
+      font-weight: 800;
+    }
+    .field:focus { border-color: rgba(118,228,247,.62); box-shadow: 0 0 0 4px rgba(118,228,247,.1); }
+    .feedback { border-radius: 20px; padding: 12px 14px; border: 1px solid var(--line); background: rgba(255,255,255,.08); line-height: 1.45; }
+    .feedback.good { border-color: rgba(52,211,153,.5); background: rgba(52,211,153,.12); }
+    .feedback.bad { border-color: rgba(251,113,133,.5); background: rgba(251,113,133,.12); }
+    .match-grid { display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:12px; width:100%; align-items:start; }
+    .match-col { display:grid; gap:9px; }
+    .match-item { min-height:60px; border:1px solid var(--line); background:rgba(255,255,255,.09); border-radius:18px; padding:12px; font-weight:900; }
+    .match-item.selected { outline: 3px solid rgba(118,228,247,.35); border-color: rgba(118,228,247,.75); }
+    .match-item.done { opacity: .36; text-decoration: line-through; pointer-events:none; }
+    .list-tools { display:flex; gap:10px; flex-wrap:wrap; margin: 14px 0; }
+    .search { flex: 1 1 260px; min-width:0; direction: rtl; }
+    .table { display:grid; gap:8px; }
+    .row { display:grid; grid-template-columns: 1.1fr 1.4fr auto; gap:10px; align-items:center; border:1px solid var(--line); border-radius:18px; background:rgba(255,255,255,.07); padding:12px; }
+    .row .en { direction:ltr; unicode-bidi:isolate; font-weight:950; }
+    .row .he { font-weight:800; }
+    .stars { border:0; background:transparent; font-size:1.3rem; padding:8px; }
+    .result { text-align:center; padding: 30px; }
+    .score { font-size: clamp(4rem, 20vw, 8rem); font-weight: 1000; letter-spacing:-.08em; margin: 6px 0; background: linear-gradient(135deg, var(--brand), var(--brand2)); -webkit-background-clip:text; color:transparent; }
+    .bottom-nav {
+      position: fixed;
+      left: 50%; bottom: calc(12px + var(--safeBottom)); transform: translateX(-50%);
+      width: min(680px, calc(100% - 20px));
+      display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px;
+      padding: 8px; border: 1px solid var(--line); background: rgba(8,17,31,.78); backdrop-filter: blur(20px);
+      border-radius: 24px; z-index: 20; box-shadow: var(--shadow);
+    }
+    .navbtn { border:0; border-radius:18px; background:transparent; min-height:50px; color: var(--muted); font-weight:900; font-size:.78rem; display:grid; place-items:center; gap:2px; }
+    .navbtn.active, .navbtn:hover { background: rgba(255,255,255,.11); color: var(--text); }
+    .navbtn b { display:block; font-size:1.15rem; }
+    .kbd { direction:ltr; unicode-bidi:isolate; background:rgba(255,255,255,.1); border:1px solid var(--line); padding:2px 7px; border-radius:8px; }
+    .tiny { color: var(--muted2); font-size: .78rem; line-height: 1.5; }
+    .login-grid { display:grid; gap:10px; max-width: 420px; }
+    .login-grid input { direction:ltr; text-align:left; }
+    @media (max-width: 860px) {
+      .hero, .screen { grid-template-columns: 1fr; }
+      .side { position: static; }
+      .stats { grid-template-columns: repeat(2, 1fr); }
+      .topbar { align-items:flex-start; flex-direction:column; }
+      .status { justify-content:flex-start; }
+      .question-card { min-height: 455px; }
+    }
+    @media (max-width: 540px) {
+      .app { padding-inline: 12px; }
+      .panel { padding: 16px; border-radius: 24px; }
+      .modes, .choices, .match-grid { grid-template-columns: 1fr; }
+      .row { grid-template-columns: 1fr auto; }
+      .row .he { grid-column: 1 / -1; }
+      .logo-mark { width:42px; height:42px; }
+      .bottom-nav { gap: 4px; padding: 6px; border-radius: 22px; }
+      .navbtn { min-height:48px; font-size:.68rem; }
+      .question-card { min-height: 430px; }
+    }
+  </style>
+</head>
+<body>
+  <main id="app" class="app" aria-live="polite"></main>
+  <nav class="bottom-nav" aria-label="ניווט">
+    <button class="navbtn active" data-nav="home"><b>🏠</b>בית</button>
+    <button class="navbtn" data-nav="flash"><b>🃏</b>כרטיס</button>
+    <button class="navbtn" data-nav="quiz"><b>🎯</b>בחירה</button>
+    <button class="navbtn" data-nav="match"><b>🧩</b>התאמה</button>
+    <button class="navbtn" data-nav="list"><b>📚</b>רשימה</button>
+  </nav>
+  <script src="firebase-config.js?v=verified-2026-06-15-v4"></script>
+  <script>
+  (function(){
+    'use strict';
+    const APP_VERSION = 'verified-2026-06-15-v4';
+    const FIREBASE_CDN_VERSION = '10.12.5';
+    const LS_KEY = 'vocabQuestProgressVerifiedV4';
+    const WORDS = [
+  {
+    "id": "compliance",
+    "term": "compliance",
+    "translation": "היענות / ציות / הסכמה",
+    "cat": "Vocabulary",
+    "hint": "agreement"
+  },
+  {
+    "id": "induce",
+    "term": "induce",
+    "translation": "לשכנע / לגרום",
+    "cat": "Vocabulary",
+    "hint": "persuade"
+  },
+  {
+    "id": "subjects",
+    "term": "subjects",
+    "translation": "נבדקים / משתתפים",
+    "cat": "Vocabulary",
+    "hint": "participants"
+  },
+  {
+    "id": "explore",
+    "term": "explore",
+    "translation": "לחקור / לבדוק",
+    "cat": "Vocabulary",
+    "hint": "research"
+  },
+  {
+    "id": "substantial",
+    "term": "substantial",
+    "translation": "משמעותי / ניכר / גדול",
+    "cat": "Vocabulary",
+    "hint": "large"
+  },
+  {
+    "id": "pro-social",
+    "term": "pro-social",
+    "translation": "פרו־חברתי / חברתי",
+    "cat": "Vocabulary",
+    "hint": "opposite of anti-social"
+  },
+  {
+    "id": "unscrupulous",
+    "term": "unscrupulous",
+    "translation": "חסר מצפון / לא מוסרי",
+    "cat": "Vocabulary",
+    "hint": "opposite of moral"
+  },
+  {
+    "id": "discourage",
+    "term": "discourage",
+    "translation": "להרתיע / לייאש",
+    "cat": "Vocabulary",
+    "hint": "opposite of encourage"
+  },
+  {
+    "id": "persuade",
+    "term": "persuade",
+    "translation": "לשכנע",
+    "cat": "Vocabulary",
+    "hint": "synonym of induce"
+  },
+  {
+    "id": "empirical",
+    "term": "empirical",
+    "translation": "אמפירי / מבוסס על ניסוי או תצפית",
+    "cat": "Vocabulary",
+    "hint": "synonym of experimental"
+  },
+  {
+    "id": "implicit",
+    "term": "implicit",
+    "translation": "משתמע / מרומז / לא מפורש",
+    "cat": "Vocabulary",
+    "hint": "opposite of explicit"
+  },
+  {
+    "id": "average-mean",
+    "term": "average = mean",
+    "translation": "ממוצע",
+    "cat": "Business English",
+    "hint": "mean"
+  },
+  {
+    "id": "capital-fortune",
+    "term": "capital = fortune",
+    "translation": "הון / רכוש",
+    "cat": "Business English",
+    "hint": "fortune"
+  },
+  {
+    "id": "capitalize",
+    "term": "capitalize (v.)",
+    "translation": "להוון / לנצל לתועלת",
+    "cat": "Business English",
+    "hint": "make use of"
+  },
+  {
+    "id": "commodity",
+    "term": "commodity",
+    "translation": "סחורה / מוצר בסיסי",
+    "cat": "Business English",
+    "hint": "basic product"
+  },
+  {
+    "id": "devaluation",
+    "term": "devaluation ≠ overvaluation",
+    "translation": "פיחות ≠ הערכת יתר של המטבע",
+    "cat": "Business English",
+    "hint": "of money"
+  },
+  {
+    "id": "economic",
+    "term": "economic",
+    "translation": "כלכלי",
+    "cat": "Business English",
+    "hint": "related to economy"
+  },
+  {
+    "id": "economical",
+    "term": "economical",
+    "translation": "חסכוני",
+    "cat": "Business English",
+    "hint": "saving money"
+  },
+  {
+    "id": "economics",
+    "term": "economics",
+    "translation": "כלכלה — תחום הלימוד",
+    "cat": "Business English",
+    "hint": "field of study"
+  },
+  {
+    "id": "economist",
+    "term": "economist",
+    "translation": "כלכלן",
+    "cat": "Business English",
+    "hint": "person"
+  },
+  {
+    "id": "economy",
+    "term": "economy",
+    "translation": "כלכלה / משק",
+    "cat": "Business English",
+    "hint": "the system"
+  },
+  {
+    "id": "executive",
+    "term": "executive = senior manager",
+    "translation": "מנהל בכיר",
+    "cat": "Business English",
+    "hint": "senior manager"
+  },
+  {
+    "id": "expenditure",
+    "term": "expenditure",
+    "translation": "הוצאה / הוצאות",
+    "cat": "Business English",
+    "hint": "spending"
+  },
+  {
+    "id": "franchise",
+    "term": "franchise",
+    "translation": "זיכיון",
+    "cat": "Business English",
+    "hint": "business license"
+  },
+  {
+    "id": "labor",
+    "term": "labor",
+    "translation": "עבודה / כוח עבודה",
+    "cat": "Business English",
+    "hint": "work force"
+  },
+  {
+    "id": "lend-borrow",
+    "term": "lend ≠ borrow",
+    "translation": "להלוות ≠ ללוות",
+    "cat": "Business English",
+    "hint": "give vs take a loan"
+  },
+  {
+    "id": "overhead",
+    "term": "overhead",
+    "translation": "תקורות / עלויות כלליות",
+    "cat": "Business English",
+    "hint": "general business costs"
+  },
+  {
+    "id": "phenomenon",
+    "term": "phenomenon, phenomena",
+    "translation": "תופעה; תופעות",
+    "cat": "Business English",
+    "hint": "singular/plural"
+  },
+  {
+    "id": "propensity",
+    "term": "propensity = tendency",
+    "translation": "נטייה",
+    "cat": "Business English",
+    "hint": "tendency"
+  },
+  {
+    "id": "recession",
+    "term": "recession",
+    "translation": "מיתון",
+    "cat": "Business English",
+    "hint": "economic downturn"
+  },
+  {
+    "id": "carry-out",
+    "term": "carry out",
+    "translation": "לבצע",
+    "cat": "Terms & Expressions",
+    "hint": "perform"
+  },
+  {
+    "id": "disposable-income",
+    "term": "disposable income",
+    "translation": "הכנסה פנויה",
+    "cat": "Terms & Expressions",
+    "hint": "money available to spend"
+  },
+  {
+    "id": "economic-growth",
+    "term": "economic growth",
+    "translation": "צמיחה כלכלית",
+    "cat": "Terms & Expressions",
+    "hint": "growth"
+  },
+  {
+    "id": "economic-prosperity",
+    "term": "economic prosperity",
+    "translation": "שגשוג כלכלי",
+    "cat": "Terms & Expressions",
+    "hint": "prosperity"
+  },
+  {
+    "id": "economies-of-scale",
+    "term": "economies of scale",
+    "translation": "יתרונות לגודל",
+    "cat": "Terms & Expressions",
+    "hint": "scale advantage"
+  },
+  {
+    "id": "fringe-benefits",
+    "term": "fringe benefits",
+    "translation": "הטבות נלוות",
+    "cat": "Terms & Expressions",
+    "hint": "extra employee benefits"
+  },
+  {
+    "id": "guaranteed-period",
+    "term": "guaranteed period",
+    "translation": "תקופת אחריות / תקופה מובטחת",
+    "cat": "Terms & Expressions",
+    "hint": "warranty period"
+  },
+  {
+    "id": "industrialized-countries",
+    "term": "industrialized countries",
+    "translation": "מדינות מתועשות",
+    "cat": "Terms & Expressions",
+    "hint": "developed industry"
+  },
+  {
+    "id": "market-segment",
+    "term": "market segment",
+    "translation": "פלח שוק",
+    "cat": "Terms & Expressions",
+    "hint": "part of a market"
+  },
+  {
+    "id": "peak-viewing-times",
+    "term": "peak viewing times",
+    "translation": "שעות צפיית שיא",
+    "cat": "Terms & Expressions",
+    "hint": "most watched hours"
+  },
+  {
+    "id": "propaganda-techniques",
+    "term": "propaganda techniques",
+    "translation": "טכניקות תעמולה",
+    "cat": "Terms & Expressions",
+    "hint": "methods of persuasion"
+  },
+  {
+    "id": "raw-materials",
+    "term": "raw materials",
+    "translation": "חומרי גלם",
+    "cat": "Terms & Expressions",
+    "hint": "materials before production"
+  },
+  {
+    "id": "senior-junior-employee",
+    "term": "senior employee ≠ junior employee",
+    "translation": "עובד בכיר ≠ עובד זוטר",
+    "cat": "Terms & Expressions",
+    "hint": "experienced vs junior"
+  },
+  {
+    "id": "spreadsheet-software",
+    "term": "spreadsheet software",
+    "translation": "תוכנת גיליונות אלקטרוניים",
+    "cat": "Terms & Expressions",
+    "hint": "Excel / Sheets"
+  },
+  {
+    "id": "tailor-product",
+    "term": "to tailor a product to consumer requirements/needs",
+    "translation": "להתאים מוצר לדרישות / לצורכי הצרכן",
+    "cat": "Terms & Expressions",
+    "hint": "customize product"
+  },
+  {
+    "id": "vice-president",
+    "term": "vice president",
+    "translation": "סגן נשיא / סמנכ״ל",
+    "cat": "Terms & Expressions",
+    "hint": "VP"
+  }
+];
+    const byId = Object.fromEntries(WORDS.map(w => [w.id, w]));
+    const cats = ['הכל', ...Array.from(new Set(WORDS.map(w => w.cat)))];
+    const state = {
+      screen: 'home', filter: 'הכל', search: '', current: null,
+      feedback: null, selectedTerm: null, selectedTranslation: null,
+      progress: { stats: {}, rounds: [], updatedAt: Date.now() },
+      firebase: { loading: true, configured: false, ready: false, user: null, status: 'בודק...', error: '', lastSaveAt: null },
+      saveTimer: null, exam: null
+    };
+    const $ = (sel, root=document) => root.querySelector(sel);
+    const app = $('#app');
+    const esc = value => String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+    const shuffle = arr => arr.map(v => [Math.random(), v]).sort((a,b)=>a[0]-b[0]).map(v=>v[1]);
+    const sample = (arr, n) => shuffle(arr).slice(0, n);
+    const pct = (a,b) => b ? Math.round((a / b) * 100) : 0;
+    const normalize = s => String(s || '').toLowerCase().replace(/[()־–—.,;:!?'"/\\]/g,' ').replace(/\s+/g,' ').trim();
+    const now = () => Date.now();
+
+    function loadLocal(){
+      try {
+        const raw = localStorage.getItem(LS_KEY);
+        if (raw) {
+          const data = JSON.parse(raw);
+          if (data && typeof data === 'object') state.progress = { stats: data.stats || {}, rounds: data.rounds || [], updatedAt: data.updatedAt || now() };
+        }
+      } catch(err) {}
+      for (const w of WORDS) stat(w.id);
+    }
+    function saveLocal(){
+      state.progress.updatedAt = now();
+      try { localStorage.setItem(LS_KEY, JSON.stringify(state.progress)); } catch(err) {}
+      scheduleCloudSave();
+    }
+    function stat(id){
+      if (!state.progress.stats[id]) state.progress.stats[id] = { seen:0, correct:0, wrong:0, streak:0, star:false, last:0 };
+      return state.progress.stats[id];
+    }
+    function record(id, ok){
+      const s = stat(id);
+      s.seen += 1; s.last = now();
+      if (ok) { s.correct += 1; s.streak += 1; }
+      else { s.wrong += 1; s.streak = 0; s.star = true; }
+      saveLocal();
+    }
+    function markStar(id){ stat(id).star = !stat(id).star; saveLocal(); render(); }
+    function summary(){
+      const stats = Object.values(state.progress.stats);
+      const seen = stats.filter(s => s.seen > 0).length;
+      const correct = stats.reduce((n,s)=>n+s.correct,0);
+      const wrong = stats.reduce((n,s)=>n+s.wrong,0);
+      const starred = stats.filter(s=>s.star).length;
+      const total = correct + wrong;
+      return { seen, correct, wrong, starred, accuracy: pct(correct, total), total };
+    }
+    function smartWords(n=12){
+      const sorted = WORDS.slice().sort((a,b)=>{
+        const sa = stat(a.id), sb = stat(b.id);
+        const scoreA = (sa.star ? -100 : 0) + (sa.wrong * -8) + (sa.correct * 1.2) + (sa.last ? Math.min((now()-sa.last)/86400000, 10) : -30);
+        const scoreB = (sb.star ? -100 : 0) + (sb.wrong * -8) + (sb.correct * 1.2) + (sb.last ? Math.min((now()-sb.last)/86400000, 10) : -30);
+        return scoreA - scoreB;
+      });
+      return sorted.slice(0, Math.min(n, sorted.length));
+    }
+    function optionTranslations(word, n=4){
+      return shuffle([word, ...sample(WORDS.filter(w=>w.id!==word.id), n-1)]).map(w => w.translation);
+    }
+    function firebaseBadge(){
+      const f = state.firebase;
+      if (f.loading) return '<span class="badge warn">☁️ בודק סנכרון</span>';
+      if (!f.configured) return '<span class="badge warn">☁️ שמירה מקומית</span>';
+      if (f.user) return '<span class="badge good">☁️ מסונכרן</span>';
+      if (f.error) return '<span class="badge bad">☁️ שגיאת סנכרון</span>';
+      return '<span class="badge warn">☁️ לא מחובר</span>';
+    }
+    function shell(title, subtitle, inner, side=true){
+      const s = summary();
+      return `
+      <header class="topbar">
+        <div class="logo"><div class="logo-mark">V</div><div><h1>${esc(title)}</h1><p>${esc(subtitle)}</p></div></div>
+        <div class="status">${firebaseBadge()}<span class="pill">${s.seen}/${WORDS.length} מילים</span><span class="pill">דיוק ${s.accuracy}%</span></div>
+      </header>
+      ${side ? `<section class="screen"><div class="screen-main">${inner}</div>${sidePanel()}</section>` : inner}`;
+    }
+    function sidePanel(){
+      const s = summary();
+      return `<aside class="panel side">
+        <h3>התקדמות</h3>
+        <div class="grid" style="gap:10px;margin-top:12px">
+          <div><p class="note">מילים שראית</p><div class="progressbar"><i style="width:${pct(s.seen, WORDS.length)}%"></i></div></div>
+          <div class="stat"><b>${s.accuracy}%</b><span>דיוק כללי</span></div>
+          <div class="stat"><b>${s.starred}</b><span>מילים קשות</span></div>
+        </div>
+        <div class="actions">
+          <button class="btn soft" data-action="settings">הגדרות וסנכרון</button>
+          <button class="btn danger" data-action="resetAll">איפוס התקדמות</button>
+        </div>
+        <p class="tiny">טיפ: מילים שטעית בהן מסומנות אוטומטית כקשות וחוזרות יותר בתרגול.</p>
+      </aside>`;
+    }
+    function setActive(nav){ document.querySelectorAll('.navbtn').forEach(b => b.classList.toggle('active', b.dataset.nav === nav)); }
+    function render(){
+      const routes = { home: renderHome, flash: renderFlash, quiz: renderQuiz, typing: renderTyping, match: renderMatch, list: renderList, settings: renderSettings, exam: renderExam, done: renderDone };
+      (routes[state.screen] || renderHome)();
+    }
+    function renderHome(){
+      state.screen = 'home'; setActive('home');
+      const s = summary();
+      app.innerHTML = shell('Vocab Quest', 'משחק הכנה למבחן אוצר מילים', `
+        <section class="hero">
+          <div class="panel">
+            <h2>לומדים מהר, זוכרים יותר.</h2>
+            <p class="note">בחר מצב משחק, תרגל מילים קשות, עשה מבחן אמיתי ושמור התקדמות. עובד במחשב ובאייפון.</p>
+            <div class="grid stats">
+              <div class="stat"><b>${WORDS.length}</b><span>מילים וביטויים</span></div>
+              <div class="stat"><b>${s.seen}</b><span>נלמדו</span></div>
+              <div class="stat"><b>${s.accuracy}%</b><span>דיוק</span></div>
+              <div class="stat"><b>${s.starred}</b><span>קשות</span></div>
+            </div>
+            <div class="actions"><button class="btn primary" data-action="smart">התחל חזרה חכמה</button><button class="btn soft" data-action="exam">מבחן אמיתי</button><button class="btn soft" data-action="settings">סנכרון</button></div>
+          </div>
+          <div class="grid modes">
+            ${mode('🃏','כרטיסיות','לראות מילה, לחשוב, ואז להפוך.','flash')}
+            ${mode('🎯','בחירה מרובה','שאלה מהירה עם 4 תשובות.','quiz')}
+            ${mode('⌨️','הקלדה','רואים עברית ומקלידים באנגלית.','typing')}
+            ${mode('🧩','התאמה','מתאים מילה לתרגום — נוח למגע.','match')}
+            ${mode('📚','רשימת מילים','חיפוש, כוכבים וחזרה על מילים קשות.','list')}
+            ${mode('🏁','מבחן אמיתי','20 שאלות אקראיות וציון בסוף.','exam')}
+          </div>
+        </section>`, false);
+    }
+    function mode(icon, title, desc, action){ return `<button class="mode" data-action="${action}"><span class="icon">${icon}</span><span><strong>${esc(title)}</strong><span>${esc(desc)}</span></span></button>`; }
+    function setupSession(mode, count){
+      const pool = mode === 'starred' ? WORDS.filter(w => stat(w.id).star) : mode === 'random' ? shuffle(WORDS) : smartWords(count);
+      return { words: pool.length ? sample(pool, count) : sample(WORDS, count), index:0, correct:0, answered:false, done:false };
+    }
+    function currentWord(){ return state.current.words[state.current.index]; }
+    function renderFlash(){
+      if (!state.current || state.current.type !== 'flash') state.current = { type:'flash', words: smartWords(14), index:0, flipped:false, correct:0 };
+      state.screen = 'flash'; setActive('flash');
+      const w = currentWord(); const p = pct(state.current.index, state.current.words.length);
+      app.innerHTML = shell('כרטיסיות', `${state.current.index + 1}/${state.current.words.length}`, `
+        <section class="panel question-card">
+          <div class="progressbar" style="width:100%"><i style="width:${p}%"></i></div>
+          <div class="sub">${esc(w.cat)} ${stat(w.id).star ? '⭐' : ''}</div>
+          <div class="term">${esc(w.term)}</div>
+          ${state.current.flipped ? `<div class="translation">${esc(w.translation)}</div><p class="sub ltr">Hint: ${esc(w.hint)}</p>` : `<p class="sub">נסה לומר את התרגום ואז לחץ להפוך</p>`}
+          <div class="actions">
+            ${!state.current.flipped ? `<button class="btn primary" data-action="flip">הפוך כרטיס</button>` : `<button class="btn danger" data-action="wrong">לא זכרתי</button><button class="btn primary" data-action="correct">זכרתי</button>`}
+            <button class="btn soft" data-action="star" data-id="${esc(w.id)}">${stat(w.id).star ? 'הסר כוכב' : 'סמן כקשה'} ⭐</button>
+          </div>
+        </section>`);
+    }
+    function flashAnswer(ok){
+      const w = currentWord(); record(w.id, ok); if (ok) state.current.correct += 1;
+      state.current.index += 1; state.current.flipped = false;
+      if (state.current.index >= state.current.words.length) return finish('סיימת כרטיסיות', state.current.correct, state.current.words.length, () => { state.current = null; renderFlash(); });
+      renderFlash();
+    }
+    function renderQuiz(){
+      if (!state.current || state.current.type !== 'quiz') { const s = setupSession('smart', 12); s.type='quiz'; s.answers={}; state.current=s; }
+      state.screen = 'quiz'; setActive('quiz');
+      const w = currentWord(); if (!state.current.answers[w.id]) state.current.answers[w.id] = optionTranslations(w, 4);
+      const chosen = state.current.chosen; const p = pct(state.current.index, state.current.words.length);
+      app.innerHTML = shell('בחירה מרובה', `${state.current.index + 1}/${state.current.words.length}`, `
+        <section class="panel question-card">
+          <div class="progressbar" style="width:100%"><i style="width:${p}%"></i></div>
+          <div class="sub">מה התרגום של:</div><div class="term">${esc(w.term)}</div>
+          <div class="choices">${state.current.answers[w.id].map(ans => `<button class="choice ${chosen ? (ans === w.translation ? 'good' : ans === chosen ? 'bad' : '') : ''}" data-action="choose" data-answer="${esc(ans)}" ${chosen?'disabled':''}>${esc(ans)}</button>`).join('')}</div>
+          ${chosen ? `<div class="feedback ${chosen === w.translation ? 'good' : 'bad'}">${chosen === w.translation ? 'נכון!' : `לא נכון. התשובה: <b>${esc(w.translation)}</b>`}</div><button class="btn primary" data-action="nextQuiz">המשך</button>` : ''}
+        </section>`);
+    }
+    function choose(ans){
+      if (state.current.chosen) return; const w = currentWord(); const ok = ans === w.translation;
+      state.current.chosen = ans; if (ok) state.current.correct += 1; record(w.id, ok); renderQuiz();
+    }
+    function nextQuiz(){
+      state.current.index += 1; state.current.chosen = null;
+      if (state.current.index >= state.current.words.length) return finish('סיימת בחירה מרובה', state.current.correct, state.current.words.length, () => { state.current = null; renderQuiz(); });
+      renderQuiz();
+    }
+    function renderTyping(){
+      if (!state.current || state.current.type !== 'typing') { const s = setupSession('smart', 10); s.type='typing'; state.current=s; }
+      state.screen = 'typing'; setActive('quiz');
+      const w = currentWord(); const p = pct(state.current.index, state.current.words.length);
+      app.innerHTML = shell('הקלדה', `${state.current.index + 1}/${state.current.words.length}`, `
+        <section class="panel question-card">
+          <div class="progressbar" style="width:100%"><i style="width:${p}%"></i></div>
+          <div class="sub">כתוב באנגלית:</div><div class="translation">${esc(w.translation)}</div>
+          <form data-form="typing" class="login-grid" style="width:min(520px,100%)">
+            <input class="field" name="answer" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="type the English word">
+            <button class="btn primary" type="submit">בדוק</button>
+          </form>
+          ${state.feedback ? `<div class="feedback ${state.feedback.ok ? 'good':'bad'}">${state.feedback.text}</div><button class="btn primary" data-action="nextTyping">המשך</button>` : ''}
+        </section>`);
+      const input = $('[name="answer"]'); if (input && !state.feedback) setTimeout(()=>input.focus(), 50);
+    }
+    function checkTyping(answer){
+      if (state.feedback) return; const w = currentWord(); const ok = normalize(answer) === normalize(w.term) || normalize(answer).includes(normalize(w.term));
+      if (ok) state.current.correct += 1; record(w.id, ok);
+      state.feedback = { ok, text: ok ? 'נכון!' : `כמעט. התשובה הנכונה: <span class="ltr"><b>${esc(w.term)}</b></span>` };
+      renderTyping();
+    }
+    function nextTyping(){
+      state.current.index += 1; state.feedback = null;
+      if (state.current.index >= state.current.words.length) return finish('סיימת הקלדה', state.current.correct, state.current.words.length, () => { state.current = null; renderTyping(); });
+      renderTyping();
+    }
+    function renderMatch(){
+      if (!state.current || state.current.type !== 'match') {
+        const words = sample(smartWords(8), 8);
+        state.current = { type:'match', words, terms: shuffle(words), translations: shuffle(words), done:{}, correct:0 };
+      }
+      state.screen = 'match'; setActive('match'); const remaining = state.current.words.length - Object.keys(state.current.done).length;
+      app.innerHTML = shell('התאמה', `${remaining} נשארו`, `
+        <section class="panel question-card" style="justify-content:flex-start;text-align:initial">
+          <p class="note">לחץ על מילה באנגלית ואז על התרגום המתאים.</p>
+          <div class="match-grid">
+            <div class="match-col">${state.current.terms.map(w => `<button class="match-item ltr ${state.selectedTerm===w.id?'selected':''} ${state.current.done[w.id]?'done':''}" data-action="pickTerm" data-id="${esc(w.id)}">${esc(w.term)}</button>`).join('')}</div>
+            <div class="match-col">${state.current.translations.map(w => `<button class="match-item ${state.selectedTranslation===w.id?'selected':''} ${state.current.done[w.id]?'done':''}" data-action="pickTrans" data-id="${esc(w.id)}">${esc(w.translation)}</button>`).join('')}</div>
+          </div>
+          ${state.feedback ? `<div class="feedback ${state.feedback.ok?'good':'bad'}">${state.feedback.text}</div>` : ''}
+        </section>`);
+    }
+    function pickTerm(id){ state.selectedTerm = id; tryMatch(); renderMatch(); }
+    function pickTrans(id){ state.selectedTranslation = id; tryMatch(); renderMatch(); }
+    function tryMatch(){
+      if (!state.selectedTerm || !state.selectedTranslation) return;
+      const ok = state.selectedTerm === state.selectedTranslation;
+      record(state.selectedTerm, ok);
+      if (ok) { state.current.done[state.selectedTerm] = true; state.current.correct += 1; state.feedback = { ok:true, text:'התאמה נכונה!' }; }
+      else { state.feedback = { ok:false, text:`לא מתאים. נסה שוב.` }; }
+      state.selectedTerm = null; state.selectedTranslation = null;
+      if (Object.keys(state.current.done).length >= state.current.words.length) setTimeout(()=>finish('סיימת התאמה', state.current.correct, state.current.words.length, () => { state.current = null; renderMatch(); }), 250);
+    }
+    function renderList(){
+      state.screen = 'list'; setActive('list');
+      const q = normalize(state.search); const filtered = WORDS.filter(w => (state.filter === 'הכל' || w.cat === state.filter) && (!q || normalize(w.term + ' ' + w.translation + ' ' + w.cat).includes(q)));
+      app.innerHTML = shell('רשימת מילים', `${filtered.length} פריטים`, `
+        <section class="panel">
+          <div class="list-tools">
+            <input class="field search" data-input="search" value="${esc(state.search)}" placeholder="חפש מילה או תרגום">
+            ${cats.map(c => `<button class="btn ${state.filter===c?'primary':'soft'}" data-action="filter" data-filter="${esc(c)}">${esc(c)}</button>`).join('')}
+          </div>
+          <div class="table">${filtered.map(w => { const s=stat(w.id); return `<div class="row"><div class="en">${esc(w.term)}</div><div class="he">${esc(w.translation)}<div class="tiny">${esc(w.cat)} · נכון ${s.correct} · טעויות ${s.wrong}</div></div><button class="stars" data-action="star" data-id="${esc(w.id)}" title="סמן כקשה">${s.star?'⭐':'☆'}</button></div>`; }).join('')}</div>
+        </section>`);
+    }
+    function renderExam(){
+      if (!state.exam) state.exam = setupSession('random', Math.min(20, WORDS.length));
+      const old = state.current; state.current = state.exam; state.current.type = 'examQuiz'; state.screen = 'exam'; setActive('quiz');
+      const w = currentWord(); if (!state.current.answers) state.current.answers={}; if (!state.current.answers[w.id]) state.current.answers[w.id]=optionTranslations(w,4);
+      const chosen = state.current.chosen; const p = pct(state.current.index, state.current.words.length);
+      app.innerHTML = shell('מבחן אמיתי', `${state.current.index + 1}/${state.current.words.length}`, `
+        <section class="panel question-card">
+          <div class="progressbar" style="width:100%"><i style="width:${p}%"></i></div>
+          <div class="sub">בחר את התרגום:</div><div class="term">${esc(w.term)}</div>
+          <div class="choices">${state.current.answers[w.id].map(ans => `<button class="choice ${chosen ? (ans === w.translation ? 'good' : ans === chosen ? 'bad' : '') : ''}" data-action="chooseExam" data-answer="${esc(ans)}" ${chosen?'disabled':''}>${esc(ans)}</button>`).join('')}</div>
+          ${chosen ? `<div class="feedback ${chosen === w.translation ? 'good':'bad'}">${chosen === w.translation ? 'נכון!' : `לא נכון. התשובה: <b>${esc(w.translation)}</b>`}</div><button class="btn primary" data-action="nextExam">המשך</button>` : ''}
+        </section>`);
+      state.current = old;
+    }
+    function chooseExam(ans){
+      const sess = state.exam; if (sess.chosen) return; const w = sess.words[sess.index]; const ok = ans === w.translation;
+      sess.chosen = ans; if (ok) sess.correct += 1; record(w.id, ok); renderExam();
+    }
+    function nextExam(){
+      const sess = state.exam; sess.index += 1; sess.chosen = null;
+      if (sess.index >= sess.words.length) { const c=sess.correct, t=sess.words.length; state.exam = null; return finish('ציון מבחן', c, t, () => { state.exam = null; renderExam(); }); }
+      renderExam();
+    }
+    function finish(title, correct, total, againFn){
+      state.screen = 'done'; setActive('home'); const score = pct(correct,total);
+      app.innerHTML = shell(title, 'סיכום', `
+        <section class="panel result">
+          <div class="score">${score}</div><h2>${score >= 90 ? 'אלוף!' : score >= 75 ? 'טוב מאוד' : 'צריך עוד חזרה'}</h2>
+          <p class="note">ענית נכון על ${correct} מתוך ${total}. מילים שטעית בהן נשמרו במילים הקשות.</p>
+          <div class="actions" style="justify-content:center"><button class="btn primary" data-action="again">עוד סבב</button><button class="btn soft" data-action="starred">מילים קשות</button><button class="btn soft" data-action="home">בית</button></div>
+        </section>`);
+      state.againFn = againFn;
+    }
+    function renderDone(){ renderHome(); }
+    function renderSettings(){
+      state.screen = 'settings'; setActive('home'); const f = state.firebase;
+      app.innerHTML = shell('הגדרות וסנכרון', 'שמירת התקדמות ואיפוס', `
+        <section class="panel">
+          <h2>סנכרון</h2>
+          <p class="note">בלי Firebase המשחק שומר התקדמות רק במכשיר הנוכחי. אחרי מילוי <span class="ltr">firebase-config.js</span> אפשר להתחבר באותו אימייל במחשב ובאייפון.</p>
+          <div class="feedback ${f.user?'good':f.configured?'':'bad'}" style="margin:14px 0">מצב: ${esc(f.status || (f.configured ? 'מוכן' : 'שמירה מקומית'))}${f.error ? `<br>${esc(f.error)}` : ''}</div>
+          ${f.configured && !f.user ? `<div class="login-grid"><input class="field" data-field="email" type="email" placeholder="email"><input class="field" data-field="password" type="password" placeholder="password"><div class="actions"><button class="btn primary" data-action="login">התחבר</button><button class="btn soft" data-action="signup">צור חשבון</button></div></div>` : ''}
+          ${f.user ? `<p class="note">מחובר כ־<span class="ltr">${esc(f.user.email || f.user.uid)}</span></p><div class="actions"><button class="btn primary" data-action="syncNow">סנכרן עכשיו</button><button class="btn soft" data-action="logout">התנתק</button></div>` : ''}
+          <hr style="border:0;border-top:1px solid var(--line);margin:22px 0">
+          <h2>איפוס</h2><p class="note">האיפוס מוחק את הזיכרון של ההתקדמות, כולל מילים קשות וציונים. אם אתה מחובר לענן, האיפוס נשלח גם לענן.</p>
+          <div class="actions"><button class="btn danger" data-action="resetAll">אפס את כל ההתקדמות</button><button class="btn soft" data-action="resetLocal">אפס רק במכשיר הזה</button></div>
+        </section>`);
+    }
+    function resetProgressObject(){ state.progress = { stats:{}, rounds:[], updatedAt:now() }; for (const w of WORDS) stat(w.id); }
+    async function resetAll(){
+      if (!confirm('למחוק את כל ההתקדמות?')) return;
+      resetProgressObject(); saveLocal();
+      if (state.firebase.user && state.firebase.db) await saveCloudNow();
+      renderSettings();
+    }
+    function resetLocal(){ if (!confirm('לאפס רק במכשיר הזה?')) return; resetProgressObject(); saveLocal(); renderSettings(); }
+    async function initFirebase(){
+      try {
+        if ('serviceWorker' in navigator) {
+          const regs = await navigator.serviceWorker.getRegistrations();
+          await Promise.all(regs.map(r => r.unregister()));
+        }
+        if ('caches' in window) {
+          const keys = await caches.keys();
+          await Promise.all(keys.map(k => caches.delete(k)));
+        }
+      } catch(err) {}
+      const cfg = window.VOCAB_QUEST_FIREBASE_CONFIG || {};
+      state.firebase.configured = Boolean(cfg.apiKey && cfg.authDomain && cfg.projectId && cfg.appId);
+      if (!state.firebase.configured) { state.firebase.loading=false; state.firebase.status='שמירה מקומית בלבד'; render(); return; }
+      try {
+        const [appMod, authMod, fsMod] = await Promise.all([
+          import(`https://www.gstatic.com/firebasejs/${FIREBASE_CDN_VERSION}/firebase-app.js`),
+          import(`https://www.gstatic.com/firebasejs/${FIREBASE_CDN_VERSION}/firebase-auth.js`),
+          import(`https://www.gstatic.com/firebasejs/${FIREBASE_CDN_VERSION}/firebase-firestore.js`)
+        ]);
+        const appFb = appMod.initializeApp(cfg);
+        state.firebase.auth = authMod.getAuth(appFb);
+        state.firebase.db = fsMod.getFirestore(appFb);
+        state.firebase.fns = { ...authMod, ...fsMod };
+        state.firebase.ready = true; state.firebase.loading = false; state.firebase.status = 'לא מחובר';
+        authMod.onAuthStateChanged(state.firebase.auth, async user => {
+          state.firebase.user = user;
+          state.firebase.status = user ? 'מסנכרן...' : 'לא מחובר';
+          render();
+          if (user) await loadCloud();
+        });
+      } catch(err) { state.firebase.loading=false; state.firebase.status='שגיאת Firebase'; state.firebase.error = friendlyError(err); render(); }
+    }
+    function friendlyError(err){ const msg = String(err && (err.message || err.code) || err); if (msg.includes('network')) return 'לא ניתן לטעון Firebase כרגע.'; if (msg.includes('api-key')) return 'בדוק את firebase-config.js.'; return msg.slice(0,180); }
+    function cloudRef(){ const f=state.firebase; return f.fns.doc(f.db, 'users', f.user.uid, 'vocabQuest', 'progress'); }
+    async function loadCloud(){
+      const f=state.firebase; if (!f.user || !f.db) return;
+      try {
+        const snap = await f.fns.getDoc(cloudRef());
+        if (snap.exists()) {
+          const cloud = snap.data().progress;
+          if (cloud && cloud.updatedAt && cloud.updatedAt > state.progress.updatedAt) state.progress = mergeProgress(state.progress, cloud);
+        }
+        await saveCloudNow(); f.status='מסונכרן'; render();
+      } catch(err) { f.status='שגיאת סנכרון'; f.error=friendlyError(err); render(); }
+    }
+    function mergeProgress(a,b){
+      const merged = { stats:{}, rounds:[...(a.rounds||[]), ...(b.rounds||[])].slice(-50), updatedAt: Math.max(a.updatedAt||0, b.updatedAt||0) };
+      for (const w of WORDS) {
+        const x=(a.stats||{})[w.id]||{}, y=(b.stats||{})[w.id]||{};
+        merged.stats[w.id] = { seen:Math.max(x.seen||0,y.seen||0), correct:Math.max(x.correct||0,y.correct||0), wrong:Math.max(x.wrong||0,y.wrong||0), streak:Math.max(x.streak||0,y.streak||0), star:Boolean(x.star||y.star), last:Math.max(x.last||0,y.last||0) };
+      }
+      return merged;
+    }
+    function scheduleCloudSave(){ clearTimeout(state.saveTimer); state.saveTimer=setTimeout(saveCloudNow, 700); }
+    async function saveCloudNow(){
+      const f=state.firebase; if (!f.user || !f.db) return;
+      try { await f.fns.setDoc(cloudRef(), { progress: state.progress, updatedAt: f.fns.serverTimestamp(), appVersion: APP_VERSION }, { merge: true }); f.status='מסונכרן'; f.lastSaveAt=now(); }
+      catch(err) { f.status='שגיאת שמירה'; f.error=friendlyError(err); }
+    }
+    async function login(){
+      const f=state.firebase; const email=($('[data-field="email"]')||{}).value || ''; const password=($('[data-field="password"]')||{}).value || '';
+      try { f.status='מתחבר...'; renderSettings(); await f.fns.signInWithEmailAndPassword(f.auth, email.trim(), password); }
+      catch(err) { f.error=friendlyError(err); f.status='שגיאת התחברות'; renderSettings(); }
+    }
+    async function signup(){
+      const f=state.firebase; const email=($('[data-field="email"]')||{}).value || ''; const password=($('[data-field="password"]')||{}).value || '';
+      try { f.status='יוצר חשבון...'; renderSettings(); await f.fns.createUserWithEmailAndPassword(f.auth, email.trim(), password); }
+      catch(err) { f.error=friendlyError(err); f.status='שגיאת הרשמה'; renderSettings(); }
+    }
+    async function logout(){ try { await state.firebase.fns.signOut(state.firebase.auth); } catch(err) {} renderSettings(); }
+
+    document.addEventListener('click', event => {
+      const el = event.target.closest('[data-action], [data-nav]'); if (!el) return;
+      const action = el.dataset.action || el.dataset.nav;
+      if (action === 'home') { state.current=null; state.exam=null; return renderHome(); }
+      if (action === 'smart') { state.current={ type:'flash', words: smartWords(14), index:0, flipped:false, correct:0 }; return renderFlash(); }
+      if (action === 'flash') { state.current=null; return renderFlash(); }
+      if (action === 'quiz') { state.current=null; return renderQuiz(); }
+      if (action === 'typing') { state.current=null; return renderTyping(); }
+      if (action === 'match') { state.current=null; state.selectedTerm=null; state.selectedTranslation=null; return renderMatch(); }
+      if (action === 'list') return renderList();
+      if (action === 'exam') { state.exam=null; return renderExam(); }
+      if (action === 'settings') return renderSettings();
+      if (action === 'flip') { state.current.flipped=true; return renderFlash(); }
+      if (action === 'correct') return flashAnswer(true);
+      if (action === 'wrong') return flashAnswer(false);
+      if (action === 'choose') return choose(el.dataset.answer);
+      if (action === 'nextQuiz') return nextQuiz();
+      if (action === 'nextTyping') return nextTyping();
+      if (action === 'pickTerm') return pickTerm(el.dataset.id);
+      if (action === 'pickTrans') return pickTrans(el.dataset.id);
+      if (action === 'chooseExam') return chooseExam(el.dataset.answer);
+      if (action === 'nextExam') return nextExam();
+      if (action === 'again' && state.againFn) return state.againFn();
+      if (action === 'starred') { const starred = WORDS.filter(w=>stat(w.id).star); state.current={ type:'flash', words: starred.length?starred:smartWords(10), index:0, flipped:false, correct:0 }; return renderFlash(); }
+      if (action === 'star') return markStar(el.dataset.id);
+      if (action === 'filter') { state.filter=el.dataset.filter; return renderList(); }
+      if (action === 'resetAll') return resetAll();
+      if (action === 'resetLocal') return resetLocal();
+      if (action === 'login') return login();
+      if (action === 'signup') return signup();
+      if (action === 'logout') return logout();
+      if (action === 'syncNow') return loadCloud();
+    });
+    document.addEventListener('submit', event => { const form=event.target.closest('[data-form="typing"]'); if (!form) return; event.preventDefault(); checkTyping(new FormData(form).get('answer')); });
+    document.addEventListener('input', event => { const input=event.target.closest('[data-input="search"]'); if (!input) return; state.search=input.value; renderList(); });
+    document.addEventListener('keydown', event => { if (event.key === 'Escape') renderHome(); if ((event.key === ' ' || event.key === 'Enter') && state.screen === 'flash' && state.current && !state.current.flipped) { event.preventDefault(); state.current.flipped=true; renderFlash(); } });
+    try { loadLocal(); renderHome(); initFirebase(); } catch(err) {
+      document.body.innerHTML = `<main style="font-family:Arial;direction:rtl;max-width:780px;margin:auto;padding:24px"><h1>יש שגיאה בטעינת המשחק</h1><p>שלח לי צילום מסך של ההודעה:</p><pre style="white-space:pre-wrap;background:#eee;color:#111;padding:14px;border-radius:12px">${esc(err && err.stack || err)}</pre></main>`;
+    }
+  })();
+  </script>
+</body>
+</html>
