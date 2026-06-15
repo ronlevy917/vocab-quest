@@ -1,0 +1,989 @@
+
+const WORDS = [
+  {
+    "id": "compliance",
+    "term": "compliance",
+    "translation": "היענות / ציות / הסכמה",
+    "category": "Vocabulary",
+    "answers": [
+      "compliance"
+    ]
+  },
+  {
+    "id": "induce",
+    "term": "induce",
+    "translation": "לשכנע / לגרום",
+    "category": "Vocabulary",
+    "answers": [
+      "induce"
+    ]
+  },
+  {
+    "id": "subjects",
+    "term": "subjects",
+    "translation": "נבדקים / משתתפים",
+    "category": "Vocabulary",
+    "answers": [
+      "subjects",
+      "participants"
+    ]
+  },
+  {
+    "id": "explore",
+    "term": "explore",
+    "translation": "לחקור / לבדוק",
+    "category": "Vocabulary",
+    "answers": [
+      "explore",
+      "research"
+    ]
+  },
+  {
+    "id": "substantial",
+    "term": "substantial",
+    "translation": "משמעותי / ניכר / גדול",
+    "category": "Vocabulary",
+    "answers": [
+      "substantial"
+    ]
+  },
+  {
+    "id": "persuade",
+    "term": "persuade",
+    "translation": "לשכנע",
+    "category": "Vocabulary",
+    "answers": [
+      "persuade"
+    ]
+  },
+  {
+    "id": "empirical",
+    "term": "empirical",
+    "translation": "אמפירי / מבוסס על ניסוי או תצפית",
+    "category": "Vocabulary",
+    "answers": [
+      "empirical"
+    ]
+  },
+  {
+    "id": "implicit",
+    "term": "implicit",
+    "translation": "משתמע / מרומז / לא מפורש",
+    "category": "Vocabulary",
+    "answers": [
+      "implicit"
+    ]
+  },
+  {
+    "id": "pro-social",
+    "term": "pro-social",
+    "translation": "פרו־חברתי / חברתי",
+    "category": "Vocabulary",
+    "answers": [
+      "pro-social",
+      "pro social"
+    ]
+  },
+  {
+    "id": "unscrupulous",
+    "term": "unscrupulous",
+    "translation": "חסר מצפון / לא מוסרי",
+    "category": "Vocabulary",
+    "answers": [
+      "unscrupulous"
+    ]
+  },
+  {
+    "id": "discourage",
+    "term": "discourage",
+    "translation": "להרתיע / לייאש",
+    "category": "Vocabulary",
+    "answers": [
+      "discourage"
+    ]
+  },
+  {
+    "id": "average-mean",
+    "term": "average = mean",
+    "translation": "ממוצע",
+    "category": "Business English",
+    "answers": [
+      "average",
+      "mean",
+      "average mean"
+    ]
+  },
+  {
+    "id": "capital-fortune",
+    "term": "capital = fortune",
+    "translation": "הון / רכוש",
+    "category": "Business English",
+    "answers": [
+      "capital",
+      "fortune"
+    ]
+  },
+  {
+    "id": "capitalize",
+    "term": "capitalize (v.)",
+    "translation": "להוון / לנצל לתועלת",
+    "category": "Business English",
+    "answers": [
+      "capitalize"
+    ]
+  },
+  {
+    "id": "commodity",
+    "term": "commodity",
+    "translation": "סחורה / מוצר בסיסי",
+    "category": "Business English",
+    "answers": [
+      "commodity"
+    ]
+  },
+  {
+    "id": "devaluation-overvaluation",
+    "term": "devaluation ≠ overvaluation (of money)",
+    "translation": "פיחות ≠ הערכת יתר של המטבע",
+    "category": "Business English",
+    "answers": [
+      "devaluation",
+      "overvaluation",
+      "devaluation overvaluation",
+      "devaluation overvaluation of money"
+    ]
+  },
+  {
+    "id": "economic",
+    "term": "economic",
+    "translation": "כלכלי",
+    "category": "Business English",
+    "answers": [
+      "economic"
+    ]
+  },
+  {
+    "id": "economical",
+    "term": "economical",
+    "translation": "חסכוני",
+    "category": "Business English",
+    "answers": [
+      "economical"
+    ]
+  },
+  {
+    "id": "economics",
+    "term": "economics",
+    "translation": "כלכלה — תחום הלימוד",
+    "category": "Business English",
+    "answers": [
+      "economics"
+    ]
+  },
+  {
+    "id": "economist",
+    "term": "economist",
+    "translation": "כלכלן",
+    "category": "Business English",
+    "answers": [
+      "economist"
+    ]
+  },
+  {
+    "id": "economy",
+    "term": "economy",
+    "translation": "כלכלה / משק",
+    "category": "Business English",
+    "answers": [
+      "economy"
+    ]
+  },
+  {
+    "id": "executive-manager",
+    "term": "executive = senior manager",
+    "translation": "מנהל בכיר",
+    "category": "Business English",
+    "answers": [
+      "executive",
+      "senior manager"
+    ]
+  },
+  {
+    "id": "expenditure",
+    "term": "expenditure",
+    "translation": "הוצאה / הוצאות",
+    "category": "Business English",
+    "answers": [
+      "expenditure"
+    ]
+  },
+  {
+    "id": "franchise",
+    "term": "franchise",
+    "translation": "זיכיון",
+    "category": "Business English",
+    "answers": [
+      "franchise"
+    ]
+  },
+  {
+    "id": "labor",
+    "term": "labor",
+    "translation": "עבודה / כוח עבודה",
+    "category": "Business English",
+    "answers": [
+      "labor",
+      "labour"
+    ]
+  },
+  {
+    "id": "lend-borrow",
+    "term": "lend ≠ borrow",
+    "translation": "להלוות ≠ ללוות",
+    "category": "Business English",
+    "answers": [
+      "lend",
+      "borrow",
+      "lend borrow"
+    ]
+  },
+  {
+    "id": "overhead",
+    "term": "overhead",
+    "translation": "תקורות / עלויות כלליות",
+    "category": "Business English",
+    "answers": [
+      "overhead"
+    ]
+  },
+  {
+    "id": "phenomenon-phenomena",
+    "term": "phenomenon (sing.), phenomena (pl.)",
+    "translation": "תופעה; תופעות",
+    "category": "Business English",
+    "answers": [
+      "phenomenon",
+      "phenomena"
+    ]
+  },
+  {
+    "id": "propensity-tendency",
+    "term": "propensity = tendency (to spend)",
+    "translation": "נטייה",
+    "category": "Business English",
+    "answers": [
+      "propensity",
+      "tendency",
+      "propensity tendency"
+    ]
+  },
+  {
+    "id": "recession",
+    "term": "recession",
+    "translation": "מיתון",
+    "category": "Business English",
+    "answers": [
+      "recession"
+    ]
+  },
+  {
+    "id": "carry-out",
+    "term": "carry out",
+    "translation": "לבצע",
+    "category": "Terms & Expressions",
+    "answers": [
+      "carry out"
+    ]
+  },
+  {
+    "id": "disposable-income",
+    "term": "disposable income",
+    "translation": "הכנסה פנויה",
+    "category": "Terms & Expressions",
+    "answers": [
+      "disposable income"
+    ]
+  },
+  {
+    "id": "economic-growth",
+    "term": "economic growth",
+    "translation": "צמיחה כלכלית",
+    "category": "Terms & Expressions",
+    "answers": [
+      "economic growth"
+    ]
+  },
+  {
+    "id": "economic-prosperity",
+    "term": "economic prosperity",
+    "translation": "שגשוג כלכלי",
+    "category": "Terms & Expressions",
+    "answers": [
+      "economic prosperity"
+    ]
+  },
+  {
+    "id": "economies-scale",
+    "term": "economies of scale",
+    "translation": "יתרונות לגודל",
+    "category": "Terms & Expressions",
+    "answers": [
+      "economies of scale"
+    ]
+  },
+  {
+    "id": "fringe-benefits",
+    "term": "fringe benefits",
+    "translation": "הטבות נלוות",
+    "category": "Terms & Expressions",
+    "answers": [
+      "fringe benefits"
+    ]
+  },
+  {
+    "id": "guaranteed-period",
+    "term": "guaranteed period",
+    "translation": "תקופת אחריות / תקופה מובטחת",
+    "category": "Terms & Expressions",
+    "answers": [
+      "guaranteed period"
+    ]
+  },
+  {
+    "id": "industrialized-countries",
+    "term": "industrialized countries",
+    "translation": "מדינות מתועשות",
+    "category": "Terms & Expressions",
+    "answers": [
+      "industrialized countries",
+      "industrialised countries"
+    ]
+  },
+  {
+    "id": "market-segment",
+    "term": "market segment",
+    "translation": "פלח שוק",
+    "category": "Terms & Expressions",
+    "answers": [
+      "market segment"
+    ]
+  },
+  {
+    "id": "peak-viewing-times",
+    "term": "peak viewing times",
+    "translation": "שעות צפיית שיא",
+    "category": "Terms & Expressions",
+    "answers": [
+      "peak viewing times"
+    ]
+  },
+  {
+    "id": "propaganda-techniques",
+    "term": "propaganda techniques",
+    "translation": "טכניקות תעמולה",
+    "category": "Terms & Expressions",
+    "answers": [
+      "propaganda techniques"
+    ]
+  },
+  {
+    "id": "raw-materials",
+    "term": "raw materials",
+    "translation": "חומרי גלם",
+    "category": "Terms & Expressions",
+    "answers": [
+      "raw materials"
+    ]
+  },
+  {
+    "id": "senior-junior-employee",
+    "term": "senior employee ≠ junior employee",
+    "translation": "עובד בכיר ≠ עובד זוטר",
+    "category": "Terms & Expressions",
+    "answers": [
+      "senior employee",
+      "junior employee",
+      "senior employee junior employee"
+    ]
+  },
+  {
+    "id": "spreadsheet-software",
+    "term": "spreadsheet software",
+    "translation": "תוכנת גיליונות אלקטרוניים",
+    "category": "Terms & Expressions",
+    "answers": [
+      "spreadsheet software"
+    ]
+  },
+  {
+    "id": "tailor-product",
+    "term": "to tailor a product to consumer requirements/needs",
+    "translation": "להתאים מוצר לדרישות / לצורכי הצרכן",
+    "category": "Terms & Expressions",
+    "answers": [
+      "to tailor a product to consumer requirements",
+      "tailor a product to consumer requirements",
+      "to tailor a product to consumer needs",
+      "tailor a product to consumer needs",
+      "tailor a product"
+    ]
+  },
+  {
+    "id": "vice-president",
+    "term": "vice president",
+    "translation": "סגן נשיא / סמנכ״ל",
+    "category": "Terms & Expressions",
+    "answers": [
+      "vice president"
+    ]
+  }
+];
+const STORE_KEY = "vocabQuest.v1";
+const CATS = ["הכל", "Vocabulary", "Business English", "Terms & Expressions"];
+
+const runtime = {
+  screen: "home",
+  flash: null,
+  quiz: null,
+  typing: null,
+  match: null,
+  listFilter: "הכל",
+  search: "",
+  lastFeedback: null,
+};
+
+const $app = document.getElementById("app");
+let state = loadState();
+
+function emptyStats() {
+  const stats = {};
+  for (const w of WORDS) {
+    stats[w.id] = { seen: 0, correct: 0, wrong: 0, streak: 0, box: 0, starred: false, last: 0, due: 0 };
+  }
+  return stats;
+}
+
+function loadState() {
+  const fallback = { stats: emptyStats(), sessions: 0, bestQuiz: 0, createdAt: Date.now() };
+  try {
+    const raw = localStorage.getItem(STORE_KEY);
+    if (!raw) return fallback;
+    const parsed = JSON.parse(raw);
+    parsed.stats = { ...emptyStats(), ...(parsed.stats || {}) };
+    return { ...fallback, ...parsed };
+  } catch (err) {
+    return fallback;
+  }
+}
+
+function saveState() {
+  localStorage.setItem(STORE_KEY, JSON.stringify(state));
+}
+
+function statOf(id) {
+  if (!state.stats[id]) state.stats[id] = { seen: 0, correct: 0, wrong: 0, streak: 0, box: 0, starred: false, last: 0, due: 0 };
+  return state.stats[id];
+}
+
+function shuffle(arr) {
+  const copy = [...arr];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+function sample(arr, n) {
+  return shuffle(arr).slice(0, Math.min(n, arr.length));
+}
+
+function escapeHTML(str) {
+  return String(str)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function normalize(value) {
+  return String(value)
+    .toLowerCase()
+    .replace(/[()]/g, " ")
+    .replace(/[≠=\/;,.״'\-–—:]/g, " ")
+    .replace(/\b(v|n|sing|pl|of money|to spend)\b/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function metricData() {
+  let mastered = 0, seen = 0, correct = 0, totalAnswers = 0, starred = 0;
+  for (const w of WORDS) {
+    const s = statOf(w.id);
+    if (s.box >= 4) mastered += 1;
+    if (s.seen > 0) seen += 1;
+    correct += s.correct || 0;
+    totalAnswers += (s.correct || 0) + (s.wrong || 0);
+    if (s.starred) starred += 1;
+  }
+  const accuracy = totalAnswers ? Math.round((correct / totalAnswers) * 100) : 0;
+  return { mastered, seen, accuracy, totalAnswers, starred, total: WORDS.length };
+}
+
+function progressPercent() {
+  const m = metricData();
+  return Math.round((m.mastered / m.total) * 100);
+}
+
+function chooseStudyWords(limit = WORDS.length) {
+  const now = Date.now();
+  const scored = WORDS.map(w => {
+    const s = statOf(w.id);
+    const score = (s.starred ? 80 : 0) + (s.due <= now ? 50 : 0) + Math.max(0, 30 - s.box * 7) + (s.wrong || 0) * 5 - (s.correct || 0);
+    return { w, score: score + Math.random() * 10 };
+  });
+  return scored.sort((a, b) => b.score - a.score).slice(0, limit).map(x => x.w);
+}
+
+function recordAnswer(wordId, correct) {
+  const s = statOf(wordId);
+  s.seen += 1;
+  s.last = Date.now();
+  if (correct) {
+    s.correct += 1;
+    s.streak += 1;
+    s.box = Math.min(5, s.box + 1);
+  } else {
+    s.wrong += 1;
+    s.streak = 0;
+    s.box = Math.max(0, s.box - 1);
+    s.starred = true;
+  }
+  const minutes = correct ? [10, 60, 480, 1440, 4320, 10080][s.box] || 10080 : 3;
+  s.due = Date.now() + minutes * 60 * 1000;
+  saveState();
+}
+
+function categoryLabel(cat) {
+  if (cat === "Vocabulary") return "מילים כלליות";
+  if (cat === "Business English") return "עסקים";
+  return "ביטויים";
+}
+
+function layout(title, subtitle, content, actions = "") {
+  return `
+    <header class="topbar">
+      <button class="soft-btn" data-action="home" aria-label="חזרה לבית">⌂</button>
+      <div class="brand">
+        <div class="logo">VQ</div>
+        <div>
+          <h1>${title}</h1>
+          <p>${subtitle}</p>
+        </div>
+      </div>
+      ${actions || `<span class="pill">${WORDS.length} מילים</span>`}
+    </header>
+    ${content}
+  `;
+}
+
+function renderHome() {
+  const m = metricData();
+  const pct = progressPercent();
+  const weak = WORDS.filter(w => statOf(w.id).starred || statOf(w.id).wrong > statOf(w.id).correct).slice(0, 5);
+  $app.innerHTML = `
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo">VQ</div>
+        <div>
+          <h1>Vocab Quest</h1>
+          <p>משחק הכנה למבחן אוצר מילים</p>
+        </div>
+      </div>
+      <span class="pill">${WORDS.length} מילים</span>
+    </header>
+
+    <section class="hero">
+      <h2>לומדים, מתרגלים וזוכרים.</h2>
+      <p>כל המילים שסיננת נמצאות כאן. ההתקדמות נשמרת בטלפון, ומילים שטעית בהן חוזרות אוטומטית לתרגול.</p>
+      <div class="stats-grid" aria-label="סטטיסטיקות">
+        <div class="stat"><strong>${m.mastered}/${m.total}</strong><span>נלמדו טוב</span></div>
+        <div class="stat"><strong>${m.accuracy}%</strong><span>דיוק</span></div>
+        <div class="stat"><strong>${m.starred}</strong><span>לחזרה</span></div>
+      </div>
+      <div class="progress-wrap">
+        <div class="progress-info"><span>התקדמות כללית</span><span>${pct}%</span></div>
+        <div class="progress-bar"><i style="--w:${pct}%"></i></div>
+      </div>
+    </section>
+
+    <div class="section-title"><h2>בחרי מצב משחק</h2><span>מותאם לאייפון</span></div>
+    <section class="mode-grid">
+      <button class="mode-btn" data-action="startFlash"><span class="icon">🎴</span><strong>כרטיסיות</strong><span>לחיצה הופכת את הכרטיס. מעולה לחזרה מהירה.</span></button>
+      <button class="mode-btn" data-action="startQuiz"><span class="icon">⚡</span><strong>בחירה מהירה</strong><span>בחירת התרגום הנכון מתוך 4 אפשרויות.</span></button>
+      <button class="mode-btn" data-action="startTyping"><span class="icon">✍️</span><strong>הקלדה</strong><span>רואים עברית ומקלידים את המילה באנגלית.</span></button>
+      <button class="mode-btn" data-action="startMatch"><span class="icon">🧩</span><strong>התאמה</strong><span>מחברים בין מילה באנגלית לתרגום שלה.</span></button>
+      <button class="mode-btn full" data-action="startExam"><span class="icon">🏁</span><strong>מבחן מסכם 20 שאלות</strong><span>סימולציה קצרה עם ניקוד בסוף.</span></button>
+    </section>
+
+    <section class="panel">
+      <div class="section-title" style="margin:0 0 10px"><h2>מילים שדורשות חזרה</h2><button class="soft-btn" data-action="showList">רשימה מלאה</button></div>
+      ${weak.length ? `<div class="word-list">${weak.map((w, i) => wordRow(w, i + 1)).join("")}</div>` : `<div class="empty">עדיין אין מילים קשות. התחילי משחק כדי לבנות חזרה חכמה.</div>`}
+    </section>
+    <p class="footer-note">טיפ: אחרי שתעלי ל-GitHub Pages, הוסיפי למסך הבית באייפון והוא ייפתח כמו אפליקציה.</p>
+  `;
+}
+
+function wordRow(w, num) {
+  const s = statOf(w.id);
+  const stars = s.starred ? "★" : "☆";
+  const pct = Math.min(100, Math.round((s.box / 5) * 100));
+  return `
+    <article class="word-row">
+      <div class="num">${num}</div>
+      <div>
+        <b>${escapeHTML(w.term)}</b>
+        <small>${escapeHTML(w.translation)} · ${categoryLabel(w.category)}</small>
+      </div>
+      <button class="star" data-action="toggleStar" data-id="${w.id}" aria-label="סימון לחזרה">${stars}</button>
+      <span class="mini-progress">${pct}%</span>
+    </article>
+  `;
+}
+
+function startFlash() {
+  runtime.screen = "flash";
+  runtime.flash = { queue: chooseStudyWords(), index: 0, flipped: false, done: 0 };
+  render();
+}
+
+function renderFlash() {
+  const f = runtime.flash;
+  if (!f || f.index >= f.queue.length) return renderSummary("סיימת חבילת כרטיסיות", "כל הכבוד! המילים שסימנת כקשות יחזרו מוקדם יותר.", "startFlash");
+  const w = f.queue[f.index];
+  const s = statOf(w.id);
+  const pct = Math.round((f.index / f.queue.length) * 100);
+  $app.innerHTML = layout("כרטיסיות", `כרטיס ${f.index + 1} מתוך ${f.queue.length}`, `
+    <div class="progress-wrap"><div class="progress-info"><span>התקדמות</span><span>${pct}%</span></div><div class="progress-bar"><i style="--w:${pct}%"></i></div></div>
+    <section class="study-card tap-card" data-action="flipCard" role="button" tabindex="0">
+      <div class="card-meta"><span class="category">${categoryLabel(w.category)}</span><button class="star" data-action="toggleStar" data-id="${w.id}">${s.starred ? "★" : "☆"}</button></div>
+      <div class="word-main"><div class="term">${escapeHTML(w.term)}</div><div class="hint">${f.flipped ? "התרגום:" : "לחיצה על הכרטיס מגלה את התרגום"}</div></div>
+      <div class="translation">${f.flipped ? escapeHTML(w.translation) : `<span class="hidden-translation">?</span>`}</div>
+    </section>
+    ${f.flipped ? `<div class="button-row"><button class="danger-btn" data-action="flashWrong">צריך חזרה</button><button class="primary" data-action="flashCorrect">ידעתי</button></div>` : `<button class="primary" style="width:100%;margin-top:14px" data-action="flipCard">גלה תרגום</button>`}
+  `);
+}
+
+function flashAnswer(correct) {
+  const f = runtime.flash;
+  const w = f.queue[f.index];
+  recordAnswer(w.id, correct);
+  f.index += 1;
+  f.flipped = false;
+  render();
+}
+
+function startQuiz(count = 12, exam = false) {
+  runtime.screen = "quiz";
+  const queue = chooseStudyWords(count);
+  runtime.quiz = { queue, index: 0, score: 0, answered: false, selected: null, options: [], exam };
+  buildQuizOptions();
+  render();
+}
+
+function buildQuizOptions() {
+  const q = runtime.quiz;
+  const w = q.queue[q.index];
+  const wrongs = sample(WORDS.filter(x => x.id !== w.id), 3).map(x => x.translation);
+  q.options = shuffle([w.translation, ...wrongs]);
+}
+
+function renderQuiz() {
+  const q = runtime.quiz;
+  if (!q || q.index >= q.queue.length) {
+    const pct = Math.round((q.score / q.queue.length) * 100);
+    if (q.exam) state.bestQuiz = Math.max(state.bestQuiz || 0, pct);
+    saveState();
+    return renderSummary(`ציון: ${pct}%`, `ענית נכון על ${q.score} מתוך ${q.queue.length}. השיא שלך במבחן מסכם: ${state.bestQuiz || pct}%.`, q.exam ? "startExam" : "startQuiz");
+  }
+  const w = q.queue[q.index];
+  const pct = Math.round((q.index / q.queue.length) * 100);
+  $app.innerHTML = layout(q.exam ? "מבחן מסכם" : "בחירה מהירה", `שאלה ${q.index + 1} מתוך ${q.queue.length}`, `
+    <div class="progress-wrap"><div class="progress-info"><span>התקדמות</span><span>${pct}%</span></div><div class="progress-bar"><i style="--w:${pct}%"></i></div></div>
+    <section class="study-card">
+      <div class="card-meta"><span class="category">בחרי את התרגום הנכון</span><span class="pill">${categoryLabel(w.category)}</span></div>
+      <div class="word-main"><div class="term">${escapeHTML(w.term)}</div><div class="hint">מה המשמעות בעברית?</div></div>
+    </section>
+    <section class="answer-grid">
+      ${q.options.map(opt => {
+        let cls = "answer-btn";
+        if (q.answered && opt === w.translation) cls += " correct";
+        if (q.answered && opt === q.selected && opt !== w.translation) cls += " wrong";
+        return `<button class="${cls}" data-action="quizAnswer" data-value="${escapeHTML(opt)}" ${q.answered ? "disabled" : ""}>${escapeHTML(opt)}</button>`;
+      }).join("")}
+    </section>
+    ${q.answered ? `<button class="primary" style="width:100%;margin-top:14px" data-action="quizNext">המשך</button>` : ""}
+  `);
+}
+
+function quizAnswer(value) {
+  const q = runtime.quiz;
+  if (!q || q.answered) return;
+  const w = q.queue[q.index];
+  const correct = value === w.translation;
+  q.selected = value;
+  q.answered = true;
+  if (correct) q.score += 1;
+  recordAnswer(w.id, correct);
+  render();
+}
+
+function quizNext() {
+  const q = runtime.quiz;
+  q.index += 1;
+  q.answered = false;
+  q.selected = null;
+  if (q.index < q.queue.length) buildQuizOptions();
+  render();
+}
+
+function startTyping() {
+  runtime.screen = "typing";
+  runtime.typing = { queue: chooseStudyWords(WORDS.length), index: 0, score: 0, checked: false, input: "" };
+  runtime.lastFeedback = null;
+  render();
+}
+
+function renderTyping() {
+  const t = runtime.typing;
+  if (!t || t.index >= t.queue.length) return renderSummary("סיימת תרגול הקלדה", `נכון: ${t.score} מתוך ${t.queue.length}.`, "startTyping");
+  const w = t.queue[t.index];
+  const pct = Math.round((t.index / t.queue.length) * 100);
+  const feedback = runtime.lastFeedback;
+  $app.innerHTML = layout("הקלדה", `מילה ${t.index + 1} מתוך ${t.queue.length}`, `
+    <div class="progress-wrap"><div class="progress-info"><span>התקדמות</span><span>${pct}%</span></div><div class="progress-bar"><i style="--w:${pct}%"></i></div></div>
+    <section class="study-card input-card">
+      <div class="card-meta"><span class="category">כתבי באנגלית</span><span class="pill">${categoryLabel(w.category)}</span></div>
+      <div class="translation">${escapeHTML(w.translation)}</div>
+      <form data-form="typing" autocomplete="off">
+        <input id="typingAnswer" name="answer" inputmode="text" autocapitalize="off" autocomplete="off" spellcheck="false" placeholder="הקלידי כאן באנגלית..." value="${escapeHTML(t.input || "")}" ${t.checked ? "disabled" : ""} />
+        ${t.checked ? "" : `<button class="primary" style="width:100%;margin-top:12px" type="submit">בדיקה</button>`}
+      </form>
+      ${feedback ? `<div class="feedback ${feedback.ok ? "good" : "bad"}">${feedback.ok ? "מעולה!" : "כמעט."} התשובה: <b>${escapeHTML(w.term)}</b></div>` : ""}
+    </section>
+    ${t.checked ? `<button class="primary" style="width:100%;margin-top:14px" data-action="typingNext">המשך</button>` : ""}
+  `);
+  if (!t.checked) setTimeout(() => document.getElementById("typingAnswer")?.focus(), 30);
+}
+
+function checkTyping(answer) {
+  const t = runtime.typing;
+  if (!t || t.checked) return;
+  const w = t.queue[t.index];
+  const possible = [w.term, ...(w.answers || [])].map(normalize).filter(Boolean);
+  const clean = normalize(answer);
+  const ok = possible.includes(clean);
+  t.input = answer;
+  t.checked = true;
+  if (ok) t.score += 1;
+  runtime.lastFeedback = { ok };
+  recordAnswer(w.id, ok);
+  render();
+}
+
+function typingNext() {
+  const t = runtime.typing;
+  t.index += 1;
+  t.checked = false;
+  t.input = "";
+  runtime.lastFeedback = null;
+  render();
+}
+
+function startMatch() {
+  runtime.screen = "match";
+  const pairs = sample(chooseStudyWords(18), 6);
+  runtime.match = {
+    pairs,
+    terms: shuffle(pairs.map(w => w.id)),
+    translations: shuffle(pairs.map(w => w.id)),
+    selected: null,
+    done: [],
+    mistakes: 0,
+    lastWrong: null,
+  };
+  render();
+}
+
+function renderMatch() {
+  const m = runtime.match;
+  if (!m) return;
+  const doneCount = m.done.length;
+  if (doneCount >= m.pairs.length) {
+    return renderSummary("השלמת התאמה", `מצאת ${doneCount} זוגות עם ${m.mistakes} טעויות.`, "startMatch");
+  }
+  const pct = Math.round((doneCount / m.pairs.length) * 100);
+  const byId = Object.fromEntries(m.pairs.map(w => [w.id, w]));
+  $app.innerHTML = layout("התאמה", `${doneCount} מתוך ${m.pairs.length} זוגות`, `
+    <div class="progress-wrap"><div class="progress-info"><span>התקדמות</span><span>${pct}%</span></div><div class="progress-bar"><i style="--w:${pct}%"></i></div></div>
+    <section class="panel">
+      <h3>בחרי מילה ואז את התרגום שלה</h3>
+      <div class="match-board">
+        <div class="match-col">
+          ${m.terms.map(id => {
+            const w = byId[id];
+            const cls = ["match-card", "term", m.selected === id ? "selected" : "", m.done.includes(id) ? "done" : "", m.lastWrong === id ? "wrong-shake" : ""].join(" ");
+            return `<button class="${cls}" data-action="matchTerm" data-id="${id}" ${m.done.includes(id) ? "disabled" : ""}>${escapeHTML(w.term)}</button>`;
+          }).join("")}
+        </div>
+        <div class="match-col">
+          ${m.translations.map(id => {
+            const w = byId[id];
+            const cls = ["match-card", m.done.includes(id) ? "done" : "", m.lastWrong === id ? "wrong-shake" : ""].join(" ");
+            return `<button class="${cls}" data-action="matchTranslation" data-id="${id}" ${m.done.includes(id) ? "disabled" : ""}>${escapeHTML(w.translation)}</button>`;
+          }).join("")}
+        </div>
+      </div>
+    </section>
+  `);
+}
+
+function matchTerm(id) {
+  const m = runtime.match;
+  if (!m || m.done.includes(id)) return;
+  m.selected = id;
+  m.lastWrong = null;
+  render();
+}
+
+function matchTranslation(id) {
+  const m = runtime.match;
+  if (!m || !m.selected || m.done.includes(id)) return;
+  if (m.selected === id) {
+    m.done.push(id);
+    recordAnswer(id, true);
+    m.selected = null;
+    m.lastWrong = null;
+  } else {
+    m.mistakes += 1;
+    recordAnswer(m.selected, false);
+    m.lastWrong = m.selected;
+  }
+  render();
+}
+
+function renderList() {
+  let items = WORDS.filter(w => runtime.listFilter === "הכל" || w.category === runtime.listFilter);
+  const q = runtime.search.trim().toLowerCase();
+  if (q) {
+    items = items.filter(w => `${w.term} ${w.translation} ${w.category}`.toLowerCase().includes(q));
+  }
+  $app.innerHTML = layout("רשימת מילים", "חיפוש, סימון לחזרה ומעקב התקדמות", `
+    <section class="panel">
+      <div class="list-controls">
+        <input class="search-input" data-input="search" placeholder="חיפוש מילה או תרגום..." value="${escapeHTML(runtime.search)}" />
+        <button class="danger-btn" data-action="resetProgress">איפוס</button>
+      </div>
+      <div class="chips">
+        ${CATS.map(cat => `<button class="chip ${runtime.listFilter === cat ? "active" : ""}" data-action="filterCat" data-cat="${cat}">${cat === "הכל" ? "הכל" : categoryLabel(cat)}</button>`).join("")}
+      </div>
+      <div class="word-list">
+        ${items.length ? items.map((w, i) => wordRow(w, i + 1)).join("") : `<div class="empty">לא נמצאו מילים.</div>`}
+      </div>
+    </section>
+  `);
+}
+
+function renderSummary(title, text, restartAction) {
+  $app.innerHTML = layout("סיכום", "המשיכי לתרגל כדי לנעול את המילים בזיכרון", `
+    <section class="result-card">
+      <h2>${escapeHTML(title)}</h2>
+      <p>${escapeHTML(text)}</p>
+      <div class="button-row">
+        <button class="soft-btn" data-action="home">מסך ראשי</button>
+        <button class="primary" data-action="${restartAction}">שחקי שוב</button>
+      </div>
+    </section>
+  `);
+}
+
+function render() {
+  if (runtime.screen === "home") return renderHome();
+  if (runtime.screen === "flash") return renderFlash();
+  if (runtime.screen === "quiz") return renderQuiz();
+  if (runtime.screen === "typing") return renderTyping();
+  if (runtime.screen === "match") return renderMatch();
+  if (runtime.screen === "list") return renderList();
+}
+
+function toggleStar(id) {
+  const s = statOf(id);
+  s.starred = !s.starred;
+  saveState();
+  render();
+}
+
+function resetProgress() {
+  const ok = confirm("לאפס את כל ההתקדמות והסימונים?");
+  if (!ok) return;
+  state = { stats: emptyStats(), sessions: 0, bestQuiz: 0, createdAt: Date.now() };
+  saveState();
+  render();
+}
+
+document.addEventListener("click", (event) => {
+  const el = event.target.closest("[data-action]");
+  if (!el) return;
+  const action = el.dataset.action;
+  if (action === "home") { runtime.screen = "home"; render(); return; }
+  if (action === "showList") { runtime.screen = "list"; render(); return; }
+  if (action === "startFlash") return startFlash();
+  if (action === "startQuiz") return startQuiz(12, false);
+  if (action === "startExam") return startQuiz(20, true);
+  if (action === "startTyping") return startTyping();
+  if (action === "startMatch") return startMatch();
+  if (action === "flipCard") { if (runtime.flash) { runtime.flash.flipped = true; render(); } return; }
+  if (action === "flashCorrect") return flashAnswer(true);
+  if (action === "flashWrong") return flashAnswer(false);
+  if (action === "quizAnswer") return quizAnswer(el.dataset.value);
+  if (action === "quizNext") return quizNext();
+  if (action === "typingNext") return typingNext();
+  if (action === "matchTerm") return matchTerm(el.dataset.id);
+  if (action === "matchTranslation") return matchTranslation(el.dataset.id);
+  if (action === "toggleStar") return toggleStar(el.dataset.id);
+  if (action === "filterCat") { runtime.listFilter = el.dataset.cat; render(); return; }
+  if (action === "resetProgress") return resetProgress();
+});
+
+document.addEventListener("submit", (event) => {
+  const form = event.target.closest("[data-form='typing']");
+  if (!form) return;
+  event.preventDefault();
+  const answer = new FormData(form).get("answer") || "";
+  checkTyping(answer);
+});
+
+document.addEventListener("input", (event) => {
+  const el = event.target.closest("[data-input='search']");
+  if (!el) return;
+  runtime.search = el.value;
+  renderList();
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") { runtime.screen = "home"; render(); }
+  if ((event.key === " " || event.key === "Enter") && runtime.screen === "flash" && !runtime.flash?.flipped) {
+    event.preventDefault();
+    runtime.flash.flipped = true;
+    render();
+  }
+});
+
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./sw.js").catch(() => {});
+  });
+}
+
+render();
