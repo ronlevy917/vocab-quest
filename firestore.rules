@@ -1,0 +1,10 @@
+// Firebase sync settings for Vocab Quest
+// The game works without this, but cross-device sync needs Firebase.
+// Paste your Firebase Web App config below after creating a Firebase project.
+
+window.VOCAB_QUEST_FIREBASE_CONFIG = {
+  apiKey: "",
+  authDomain: "",
+  projectId: "",
+  appId: ""
+};

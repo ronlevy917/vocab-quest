@@ -1,0 +1,96 @@
+# Vocab Quest — משחק אוצר מילים עם סנכרון
+
+גרסה משודרגת למשחק אוצר מילים שעובד ב־GitHub Pages, במחשב ובאייפון.
+
+## קבצים שצריך להעלות לריפו
+
+העלה את כל הקבצים והתיקיות האלה לשורש הריפו:
+
+- `index.html`
+- `app.js`
+- `styles.css`
+- `firebase-config.js`
+- `manifest.webmanifest`
+- `sw.js`
+- `.nojekyll`
+- `firestore.rules`
+- `icons/`
+
+## מה חדש
+
+- כרטיסיות חכמה
+- בחירה מרובה
+- הקלדה באנגלית לפי תרגום עברי
+- משחק התאמה שמתאים לטלפון
+- מבחן מסכם עם ציון
+- מילים קשות
+- חזרה חכמה לפי הצלחות/טעויות
+- שמירה מקומית אוטומטית
+- כפתור איפוס התקדמות
+- סנכרון ענן בין מחשב לאייפון בעזרת Firebase
+
+## פרסום ב־GitHub Pages
+
+1. היכנס לריפו ב־GitHub.
+2. העלה את כל הקבצים מהתיקייה הזו לשורש הריפו.
+3. עבור אל Settings → Pages.
+4. בחר Deploy from a branch.
+5. Branch: `main`, Folder: `/root`.
+6. שמור.
+
+אם האתר מראה גרסה ישנה, פתח אותו עם `?v=2026-06-15-sync-v1` בסוף הכתובת.
+
+## סנכרון בין מחשב לאייפון
+
+GitHub Pages הוא אתר סטטי, ולכן בשביל סנכרון אמיתי בין מכשירים צריך שירות ענן קטן. הגרסה הזו מוכנה ל־Firebase.
+
+### שלב 1: יצירת Firebase Project
+
+1. עבור אל Firebase Console.
+2. צור Project חדש.
+3. הוסף Web App.
+4. העתק את Firebase config.
+
+### שלב 2: הפעלת התחברות
+
+1. Firebase Console → Authentication.
+2. לחץ Get started.
+3. Sign-in method.
+4. הפעל Email/Password.
+
+### שלב 3: הפעלת Firestore
+
+1. Firebase Console → Firestore Database.
+2. צור Database.
+3. בחר Production mode.
+4. פרסם את הכללים הבאים ב־Rules:
+
+```js
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{userId}/vocabQuest/{docId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+  }
+}
+```
+
+### שלב 4: הכנסת הקונפיג לאתר
+
+פתח את הקובץ `firebase-config.js` והחלף את הערכים הריקים במה שקיבלת מ־Firebase:
+
+```js
+window.VOCAB_QUEST_FIREBASE_CONFIG = {
+  apiKey: "PASTE_HERE",
+  authDomain: "PASTE_HERE",
+  projectId: "PASTE_HERE",
+  appId: "PASTE_HERE"
+};
+```
+
+אחרי שמעלים את הקובץ המעודכן ל־GitHub, פתח את האתר, עבור להגדרות, צור חשבון/התחבר, ואז השתמש באותו חשבון גם באייפון וגם במחשב.
+
+## איפוס התקדמות
+
+בתוך המשחק: הגדרות → אפס את כל ההתקדמות. אם אתה מחובר ל־Firebase, האיפוס נשמר גם בענן.
