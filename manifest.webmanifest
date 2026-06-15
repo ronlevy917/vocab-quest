@@ -977,11 +977,16 @@
       }
     });
 
-    if (location.protocol !== "file:" && "serviceWorker" in navigator) {
-      window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(() => {}));
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.getRegistrations().then(regs => regs.forEach(reg => reg.unregister())).catch(() => {});
+      if (window.caches) caches.keys().then(keys => keys.forEach(key => caches.delete(key))).catch(() => {});
     }
 
-    renderHome();
+    try {
+      renderHome();
+    } catch (err) {
+      document.body.innerHTML = '<main style="font-family:Arial;direction:rtl;padding:24px;max-width:700px;margin:auto"><h1>יש שגיאה בטעינת המשחק</h1><p>שלח לי צילום מסך של ההודעה הזו:</p><pre style="white-space:pre-wrap;background:#f2f2f2;padding:12px;border-radius:12px">' + String(err && err.stack || err) + '</pre></main>';
+    }
   </script>
 </body>
 </html>
