@@ -1,0 +1,11 @@
+Vocab Quest sentence-completion upgrade check
+
+PASS - index.html starts with <!doctype html>
+PASS - index.html does not contain Firestore rules text
+PASS - JavaScript syntax check passed with node --check
+PASS - basic runtime render check passed in Node VM mock
+PASS - sentence completion mode exists
+PASS - sentence bank contains 46 sentences for 46 vocabulary items
+PASS - files are at the root of the ZIP, not inside an extra folder
+
+Version: sentences-2026-06-16-v1

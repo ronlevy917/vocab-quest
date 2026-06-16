@@ -1,0 +1,11 @@
+Copy this text into Firebase Console -> Firestore Database -> Rules.
+Do NOT paste this into index.html.
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{userId}/vocabQuest/{docId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+  }
+}
