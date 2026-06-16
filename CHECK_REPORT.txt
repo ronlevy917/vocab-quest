@@ -1,0 +1,18 @@
+Vocab Quest - verification report
+Version: safe-onefile-2026-06-16-v1
+
+Checks completed:
+[OK] index.html starts with <!doctype html>
+[OK] index.html does not contain Firestore rules (rules_version = '2')
+[OK] no external firebase-config.js file is included in this package
+[OK] JavaScript syntax check passed using node --check
+[OK] Parsed data: 46 vocabulary items
+[OK] Parsed data: 144 sentence-completion prompts
+[OK] Browser smoke test passed in Chromium:
+     - Home screen renders Vocab Quest
+     - Sentence-completion mode opens
+     - Hint is hidden initially
+     - Reveal-hint button displays the Hebrew hint
+
+Important:
+Only index.html is the website entry point. Do not rename any other file to index.html.
